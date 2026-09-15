@@ -1,5 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using SchoolProject.Infrasturcture.Data;
+using SchoolProject.Infrasturcture.Context;
+using SchoolProject.Infrasturcture;
+using SchoolProject.Service;
+using SchoolProject.Core;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +16,11 @@ builder.Services.AddOpenApi();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+
+
+builder.Services.AddInfrasturctureDependencies()
+                .AddServiceDependencies()
+                .AddCoreDependencies();
 
 
 var app = builder.Build();

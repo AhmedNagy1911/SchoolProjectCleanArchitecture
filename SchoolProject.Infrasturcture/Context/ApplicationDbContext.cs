@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SchoolProject.Data.Entities;
 
-namespace SchoolProject.Infrasturcture.Data;
+namespace SchoolProject.Infrasturcture.Context;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {

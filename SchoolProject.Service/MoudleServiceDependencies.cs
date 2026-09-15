@@ -1,5 +1,15 @@
-﻿namespace SchoolProject.Service;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SchoolProject.Service.Abstracts;
+using SchoolProject.Service.Implementation;
 
-internal class MouduleServiceDependencies
+namespace SchoolProject.Service;
+
+public static class MouduleServiceDependencies
 {
+    public static IServiceCollection AddServiceDependencies(this IServiceCollection services)
+    {
+        services.AddScoped<IStudentService, StudentService>();
+
+        return services;
+    }
 }
