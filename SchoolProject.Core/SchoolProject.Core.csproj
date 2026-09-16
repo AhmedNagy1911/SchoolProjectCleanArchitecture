@@ -16,10 +16,11 @@
     <Folder Include="Feature\Students\Commands\Handlers\" />
     <Folder Include="Feature\Students\Commands\Models\" />
     <Folder Include="Feature\Students\Commands\Validators\" />
-    <Folder Include="Feature\Students\Qureies\" />
+    <Folder Include="Mapping\StudentMapping\CommandMapping\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="16.2.0" />
     <PackageReference Include="MediatR" Version="14.2.0" />
   </ItemGroup>
 

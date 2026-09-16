@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SchoolProject.Core.Mapping.Models;
+using SchoolProject.Core.Feature.Students.Qureies.Models;
 
 namespace SchoolProject.Api.Controllers;
 
