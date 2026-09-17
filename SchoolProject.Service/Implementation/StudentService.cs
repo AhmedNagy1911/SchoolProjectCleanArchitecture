@@ -1,4 +1,5 @@
-﻿using SchoolProject.Data.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using SchoolProject.Data.Entities;
 using SchoolProject.Infrasturcture.Abstracts;
 using SchoolProject.Service.Abstracts;
 
@@ -11,5 +12,14 @@ public class StudentService(IStudentRepository studentRepository) : IStudentServ
     public async Task<List<Student>> GetAllStudentsAsync()
     {
         return await _studentRepository.GetAllStudentsAsync();
+    }
+
+    public async Task<Student> GetStudentByIdAsync(int id)
+    {
+        var student = await _studentRepository.GetTableNoTracking()
+                                              .Include(x => x.Department)
+                                              .Where(x => x.StudID == id)
+                                              .FirstOrDefaultAsync();
+        return student;
     }
 }
