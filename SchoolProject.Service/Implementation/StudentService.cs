@@ -22,4 +22,19 @@ public class StudentService(IStudentRepository studentRepository) : IStudentServ
                                               .FirstOrDefaultAsync();
         return student;
     }
+
+    public async Task<string> AddAsync(Student student)
+    {
+        var result =await _studentRepository.GetTableNoTracking()
+                                       .Where(x => x.Name == student.Name)
+                                       .FirstOrDefaultAsync();
+
+        if (result is not null)
+            return "Exist";
+
+        await _studentRepository.AddAsync(student);
+
+        return "Success";
+    }
+
 }
