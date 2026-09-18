@@ -3,5 +3,4 @@
   <Project Path="SchoolProject.Core/SchoolProject.Core.csproj" />
   <Project Path="SchoolProject.Data/SchoolProject.Data.csproj" />
   <Project Path="SchoolProject.Infrasturcture/SchoolProject.Infrasturcture.csproj" />
-  <Project Path="SchoolProject.Service/SchoolProject.Service.csproj" />
 </Solution>

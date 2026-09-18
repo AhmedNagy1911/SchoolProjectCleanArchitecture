@@ -1,31 +1,55 @@
 ﻿using AutoMapper;
 using MediatR;
-using SchoolProject.Core.Bases;
+using Microsoft.EntityFrameworkCore;
+using SchoolProject.Core.Abstractions;
+using SchoolProject.Core.Errors;
 using SchoolProject.Core.Feature.Students.Commands.Models;
 using SchoolProject.Data.Entities;
-using SchoolProject.Service.Abstracts;
 
 namespace SchoolProject.Core.Feature.Students.Commands.Handlers;
 
-public class StudentCommandHandler(IStudentService studentService, IMapper mapper) : ResponseHandler, IRequestHandler<AddStudentCommand, Response<string>>
+public class StudentCommandHandler(IApplicationDbContext context, IMapper mapper) :
+    IRequestHandler<AddStudentCommand, Result<int>>,
+    IRequestHandler<EditStudentCommand, Result>
 {
-    private readonly IStudentService _studentService = studentService;
+    private readonly IApplicationDbContext _context = context;
     private readonly IMapper _mapper = mapper;
 
-    public async Task<Response<string>> Handle(AddStudentCommand request, CancellationToken cancellationToken)
+    public async Task<Result<int>> Handle(AddStudentCommand request, CancellationToken cancellationToken)
     {
+        var nameExists = await _context.Students
+           .AnyAsync(x => x.Name == request.Name, cancellationToken);
+
+        if (nameExists)
+            return Result.Failure<int>(StudentErrors.DuplicatedName);
+
         var student = _mapper.Map<Student>(request);
 
-        var nameExist = await _studentService.IsNameExist(student.Name);
+        await _context.Students.AddAsync(student, cancellationToken);
 
-        if (nameExist)
-            return UnprocessableEntity<string>("Name is exist");
+        await _context.SaveChangesAsync(cancellationToken);
 
-        var result = await _studentService.AddAsync(student);
+        return Result.Success(student.StudID);
+    }
 
-        if (result == "Success")
-            return Created("Adding Succeeded");
-        else
-            return BadRequest<string>();
+    public async Task<Result> Handle(EditStudentCommand request, CancellationToken cancellationToken)
+    {
+        var student = await _context.Students
+            .FirstOrDefaultAsync(x => x.StudID == request.Id, cancellationToken);
+
+        if (student is null)
+            return Result.Failure(StudentErrors.NotFound);
+
+        var nameExists = await _context.Students
+            .AnyAsync(x => x.Name == request.Name && x.StudID != request.Id, cancellationToken);
+
+        if (nameExists)
+            return Result.Failure(StudentErrors.DuplicatedName);
+
+        _mapper.Map(request, student);
+
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return Result.Success();
     }
 }

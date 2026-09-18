@@ -1,16 +1,22 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using SchoolProject.Infrasturcture.Abstracts;
-using SchoolProject.Infrasturcture.Bases;
-using SchoolProject.Infrasturcture.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using SchoolProject.Core.Abstractions;
+using SchoolProject.Infrasturcture.Context;
 
 namespace SchoolProject.Infrasturcture;
 
 public static class MouduleInfrasturctureDependencies
 {
-    public static IServiceCollection AddInfrasturctureDependencies(this IServiceCollection services)
+    public static IServiceCollection AddInfrasturctureDependencies(this IServiceCollection services, IConfiguration config)
     {
-        services.AddScoped<IStudentRepository, StudentRepository>();
-        services.AddTransient(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
+        var connectionString = config.GetConnectionString("DefaultConnection") ??
+                 throw new InvalidOperationException("Connection string 'DefaultConnection' is not found.");
+
+        services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlServer(connectionString));
+
+        services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<ApplicationDbContext>());
 
         return services;
     }

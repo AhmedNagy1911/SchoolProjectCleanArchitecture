@@ -3,11 +3,13 @@ using SchoolProject.Core.Feature.Students.Commands.Models;
 
 namespace SchoolProject.Core.Feature.Students.Commands.Validators;
 
-
-public class AddStudentCommandValidator : AbstractValidator<AddStudentCommand>
+public class EditStudentCommandValidator : AbstractValidator<EditStudentCommand>
 {
-    public AddStudentCommandValidator()
+    public EditStudentCommandValidator()
     {
+        RuleFor(x => x.Id)
+            .GreaterThan(0);
+
         RuleFor(x => x.Name)
             .NotEmpty()
             .MaximumLength(200);
@@ -23,3 +25,4 @@ public class AddStudentCommandValidator : AbstractValidator<AddStudentCommand>
             .GreaterThan(0);
     }
 }
+

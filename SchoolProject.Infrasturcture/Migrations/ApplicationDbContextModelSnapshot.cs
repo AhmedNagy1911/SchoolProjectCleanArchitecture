@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SchoolProject.Infrasturcture.Context;
 
-
 #nullable disable
 
 namespace SchoolProject.Infrasturcture.Migrations

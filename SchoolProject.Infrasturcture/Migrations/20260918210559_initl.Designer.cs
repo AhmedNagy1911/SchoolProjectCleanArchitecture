@@ -7,14 +7,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SchoolProject.Infrasturcture.Context;
 
-
 #nullable disable
 
 namespace SchoolProject.Infrasturcture.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260915024906_intit")]
-    partial class intit
+    [Migration("20260918210559_initl")]
+    partial class initl
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
