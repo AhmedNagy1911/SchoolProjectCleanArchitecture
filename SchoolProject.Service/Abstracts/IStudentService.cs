@@ -7,4 +7,5 @@ public interface IStudentService
     Task<List<Student>> GetAllStudentsAsync();
     Task<Student> GetStudentByIdAsync(int id);
     Task<string> AddAsync(Student student);
+    Task<bool> IsNameExist(string name);
 }

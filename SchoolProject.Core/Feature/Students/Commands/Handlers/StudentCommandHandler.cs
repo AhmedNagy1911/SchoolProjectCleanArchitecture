@@ -7,7 +7,7 @@ using SchoolProject.Service.Abstracts;
 
 namespace SchoolProject.Core.Feature.Students.Commands.Handlers;
 
-public class StudentCommandHandler(IStudentService studentService,IMapper mapper) : ResponseHandler ,IRequestHandler<AddStudentCommand, Response<string>>
+public class StudentCommandHandler(IStudentService studentService, IMapper mapper) : ResponseHandler, IRequestHandler<AddStudentCommand, Response<string>>
 {
     private readonly IStudentService _studentService = studentService;
     private readonly IMapper _mapper = mapper;
@@ -16,14 +16,15 @@ public class StudentCommandHandler(IStudentService studentService,IMapper mapper
     {
         var student = _mapper.Map<Student>(request);
 
-      var result = await _studentService.AddAsync(student);
+        var nameExist = await _studentService.IsNameExist(student.Name);
 
-        if (result == "Exist")
+        if (nameExist)
             return UnprocessableEntity<string>("Name is exist");
 
-        else if (result == "Success")
-            return Created("Adding Succeeded");
+        var result = await _studentService.AddAsync(student);
 
+        if (result == "Success")
+            return Created("Adding Succeeded");
         else
             return BadRequest<string>();
     }
