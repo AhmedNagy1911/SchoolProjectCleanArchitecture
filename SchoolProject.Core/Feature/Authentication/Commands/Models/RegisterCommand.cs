@@ -8,4 +8,5 @@ public record RegisterCommand(
     string Password,
     string FirstName,
     string LastName,
-    string UserName) : IRequest<Result>;
+    string UserName,
+    string PhoneNumber) : IRequest<Result>;

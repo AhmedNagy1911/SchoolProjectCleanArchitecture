@@ -27,7 +27,8 @@ public class RegisterCommandHandler(UserManager<ApplicationUser> userManager, IE
             Email = request.Email,
             UserName = request.UserName,
             FirstName = request.FirstName,
-            LastName = request.LastName
+            LastName = request.LastName,
+            PhoneNumber = request.PhoneNumber
         };
 
         var result = await _userManager.CreateAsync(user, request.Password);
