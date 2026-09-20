@@ -59,4 +59,12 @@ public class AuthController(ISender sender) : ControllerBase
         return result.IsSuccess ? Ok() : result.ToProblem();
     }
 
+    [HttpPost("forget-password")]
+    public async Task<IActionResult> ForgetPassword([FromBody] ForgetPasswordCommand command, CancellationToken cancellationToken)
+    {
+        var result = await _sender.Send(command, cancellationToken);
+
+        return result.IsSuccess ? Ok() : result.ToProblem();
+    }
+
 }
