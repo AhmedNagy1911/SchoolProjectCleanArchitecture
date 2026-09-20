@@ -67,4 +67,11 @@ public class AuthController(ISender sender) : ControllerBase
         return result.IsSuccess ? Ok() : result.ToProblem();
     }
 
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordCommand command, CancellationToken cancellationToken)
+    {
+        var result = await _sender.Send(command, cancellationToken);
+
+        return result.IsSuccess ? Ok() : result.ToProblem();
+    }
 }
