@@ -1,11 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SchoolProject.Core.Abstractions;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using SchoolProject.Core.Abstractions.Interfaces;
 using SchoolProject.Data.Entities;
+using System.Reflection;
 
 namespace SchoolProject.Infrasturcture.Context;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-    : DbContext(options), IApplicationDbContext
+    : IdentityUserContext<ApplicationUser>(options), IApplicationDbContext
 {
     public DbSet<Student> Students { get; set; }
     public DbSet<Department> Departments { get; set; }
@@ -13,4 +15,10 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<StudentSubject> StudentSubjects { get; set; }
     public DbSet<DepartmetSubject> DepartmetSubjects { get; set; }
 
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+
+        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+    }
 }

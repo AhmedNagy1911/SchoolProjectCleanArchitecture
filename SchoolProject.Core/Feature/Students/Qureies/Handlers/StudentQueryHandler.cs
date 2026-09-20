@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SchoolProject.Core.Abstractions;
+using SchoolProject.Core.Abstractions.Interfaces;
 using SchoolProject.Core.Errors;
 using SchoolProject.Core.Feature.Students.Qureies.Models;
 using SchoolProject.Core.Feature.Students.Qureies.Results;

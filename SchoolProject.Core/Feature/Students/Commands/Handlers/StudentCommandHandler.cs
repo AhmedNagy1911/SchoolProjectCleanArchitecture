@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SchoolProject.Core.Abstractions;
+using SchoolProject.Core.Abstractions.Interfaces;
 using SchoolProject.Core.Errors;
 using SchoolProject.Core.Feature.Students.Commands.Models;
 using SchoolProject.Data.Entities;

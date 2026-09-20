@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SchoolProject.Data.Entities;
 
-namespace SchoolProject.Core.Abstractions;
+namespace SchoolProject.Core.Abstractions.Interfaces;
 
 public interface IApplicationDbContext
 {
