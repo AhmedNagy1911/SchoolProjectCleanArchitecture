@@ -11,17 +11,22 @@ namespace SchoolProject.Infrasturcture.Services;
 
 public class JwtProvider(IOptions<JwtOptions> options) : IJwtProvider
 {
+    // must match TokenValidationParameters.RoleClaimType in MouduleInfrasturctureDependencies
+    public const string RoleClaimType = "role";
+
     private readonly JwtOptions _options = options.Value;
 
-    public (string token, int expiresIn) GenerateToken(ApplicationUser user)
+    public (string token, int expiresIn) GenerateToken(ApplicationUser user, IEnumerable<string> roles)
     {
-        Claim[] claims = [
+        List<Claim> claims = [
             new(JwtRegisteredClaimNames.Sub, user.Id),
             new(JwtRegisteredClaimNames.Email, user.Email!),
             new(JwtRegisteredClaimNames.GivenName, user.FirstName),
             new(JwtRegisteredClaimNames.FamilyName, user.LastName),
             new(JwtRegisteredClaimNames.Jti, Guid.CreateVersion7().ToString())
         ];
+
+        claims.AddRange(roles.Select(role => new Claim(RoleClaimType, role)));
 
         var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Key));
         var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);

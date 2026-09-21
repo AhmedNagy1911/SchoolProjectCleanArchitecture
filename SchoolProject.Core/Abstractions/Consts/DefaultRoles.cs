@@ -8,8 +8,8 @@ public static class DefaultRoles
 
 
     public const string Teacher = nameof(Teacher);
-    public const string MemberRoleId = "0191a4b6-c4fc-752e-9d95-40b7a5cb88f0";
-    public const string MemberRoleConcurrencyStamp = "0191a4b6-c4fc-752e-9d95-40b85cf3fd22";
+    public const string TeacherRoleId = "0191a4b6-c4fc-752e-9d95-40b7a5cb88f0";
+    public const string TeacherRoleConcurrencyStamp = "0191a4b6-c4fc-752e-9d95-40b85cf3fd22";
 
     public const string Parent = nameof(Parent);
     public const string ParentRoleId = "4315061C-AF52-4C13-A9EF-ED41A5941362";
