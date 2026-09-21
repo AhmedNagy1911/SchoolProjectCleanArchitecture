@@ -4,7 +4,7 @@ namespace SchoolProject.Core.Abstractions.Interfaces;
 
 public interface IJwtProvider
 {
-    (string token, int expiresIn) GenerateToken(ApplicationUser user);
+    (string token, int expiresIn) GenerateToken(ApplicationUser user, IEnumerable<string> roles);
 
     /// <summary>Validates the signature only (lifetime is ignored) and returns the user id (sub claim).</summary>
     string? ValidateToken(string token);

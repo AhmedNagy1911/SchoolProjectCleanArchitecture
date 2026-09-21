@@ -10,6 +10,7 @@ using SchoolProject.Data.Entities;
 using SchoolProject.Infrasturcture.Context;
 using SchoolProject.Infrasturcture.Options;
 using SchoolProject.Infrasturcture.Services;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
 namespace SchoolProject.Infrasturcture;
@@ -52,6 +53,7 @@ public static class MouduleInfrasturctureDependencies
             options.Password.RequiredLength = 8;
             options.User.RequireUniqueEmail = true;
         })
+            .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
@@ -66,6 +68,8 @@ public static class MouduleInfrasturctureDependencies
                 var jwt = jwtOptions.Value;
 
                 bearer.SaveToken = true;
+                bearer.MapInboundClaims = false;
+
                 bearer.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
@@ -74,7 +78,9 @@ public static class MouduleInfrasturctureDependencies
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Key)),
                     ValidIssuer = jwt.Issuer,
-                    ValidAudience = jwt.Audience
+                    ValidAudience = jwt.Audience,
+                    NameClaimType = JwtRegisteredClaimNames.Sub,
+                    RoleClaimType = JwtProvider.RoleClaimType
                 };
             });
 

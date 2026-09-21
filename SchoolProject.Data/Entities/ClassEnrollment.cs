@@ -1,5 +1,6 @@
 ﻿namespace SchoolProject.Data.Entities;
 
+//تسجيل طالب في فصل في سنة دراسية. بيتغير كل سنة، وده اللي بيخلّي الطالب يتنقل من فصل لفصل.
 public class ClassEnrollment
 {
     public int Id { get; set; }
