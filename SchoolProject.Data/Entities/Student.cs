@@ -1,21 +1,23 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿namespace SchoolProject.Data.Entities;
 
-namespace SchoolProject.Data.Entities;
-
-//الطالب ممكن يدرس مواد كتير، والمادة ممكن تكون عند طلاب كتير.
 public class Student
 {
-    [Key]
     public int StudID { get; set; }
-    [StringLength(200)]
     public string Name { get; set; } = string.Empty;
-    [StringLength(500)]
     public string Address { get; set; } = string.Empty;
-    [StringLength(500)]
     public string Phone { get; set; } = string.Empty;
     public int? DID { get; set; }
 
-    [ForeignKey("DID")]
-    public virtual Department Department { get; set; } = default!;
+    /// <summary>Optional: only set if the student has his own login.</summary>
+    public string? ApplicationUserId { get; set; }
+
+    public virtual Department? Department { get; set; }
+    public virtual ApplicationUser? ApplicationUser { get; set; }
+
+    public virtual ICollection<StudentSubject> StudentSubjects { get; set; } = [];
+    public virtual ICollection<ClassEnrollment> ClassEnrollments { get; set; } = [];
+    public virtual ICollection<ParentStudent> ParentStudents { get; set; } = [];
+    public virtual ICollection<Attendance> Attendances { get; set; } = [];
+    public virtual ICollection<StudentGrade> StudentGrades { get; set; } = [];
+    public virtual ICollection<Invoice> Invoices { get; set; } = [];
 }
