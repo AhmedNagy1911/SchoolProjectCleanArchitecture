@@ -7,7 +7,7 @@ using System.Reflection;
 namespace SchoolProject.Infrasturcture.Context;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-    : IdentityUserContext<ApplicationUser>(options), IApplicationDbContext
+    : IdentityDbContext<ApplicationUser>(options), IApplicationDbContext
 {
     public DbSet<Student> Students { get; set; }
     public DbSet<Department> Departments { get; set; }
