@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolProject.Api.Extensions;
+using SchoolProject.Core.Abstractions.Consts;
 using SchoolProject.Core.Feature.Students.Commands.Models;
 using SchoolProject.Core.Feature.Students.Qureies.Models;
 
@@ -15,6 +16,7 @@ public class StudentsController(ISender sender) : ControllerBase
     private readonly ISender _sender = sender;
 
     [HttpGet("")]
+    [Authorize(Roles = $"{DefaultRoles.Admin},{DefaultRoles.Teacher}")]
     public async Task<IActionResult> GetStudents(CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new GetStudentListQuery(), cancellationToken);
@@ -23,6 +25,7 @@ public class StudentsController(ISender sender) : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(Roles = $"{DefaultRoles.Admin},{DefaultRoles.Teacher}")]
     public async Task<IActionResult> GetStudentById([FromRoute] int id, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(new GetStudentByIdQuery(id), cancellationToken);
@@ -31,6 +34,7 @@ public class StudentsController(ISender sender) : ControllerBase
     }
 
     [HttpPost("")]
+    [Authorize(Roles = DefaultRoles.Admin)]
     public async Task<IActionResult> Create([FromBody] AddStudentCommand command, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(command, cancellationToken);
@@ -41,6 +45,7 @@ public class StudentsController(ISender sender) : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = DefaultRoles.Admin)]
     public async Task<IActionResult> Update([FromRoute] int id, [FromBody] EditStudentCommand command, CancellationToken cancellationToken)
     {
         command.Id = id;
