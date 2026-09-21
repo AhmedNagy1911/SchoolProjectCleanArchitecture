@@ -37,8 +37,12 @@ public static class MouduleInfrasturctureDependencies
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
+        services.AddOptions<FrontendOptions>()
+            .BindConfiguration(FrontendOptions.SectionName)
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
         // ── Services ─────────────────────────────────────────────
-        services.AddHttpContextAccessor();
         services.AddScoped<IJwtProvider, JwtProvider>();
         services.AddScoped<IEmailService, EmailService>();
 

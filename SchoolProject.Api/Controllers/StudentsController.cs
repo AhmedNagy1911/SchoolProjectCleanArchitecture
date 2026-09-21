@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolProject.Api.Extensions;
 using SchoolProject.Core.Feature.Students.Commands.Models;
@@ -8,6 +9,7 @@ namespace SchoolProject.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class StudentsController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;

@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using SchoolProject.Api.Extensions;
 using SchoolProject.Core.Feature.Authentication.Commands.Models;
 
@@ -7,11 +8,13 @@ namespace SchoolProject.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[EnableRateLimiting("auth")]
 public class AuthController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;
 
     [HttpPost("register")]
+    [EnableRateLimiting("email")]
     public async Task<IActionResult> Register([FromBody] RegisterCommand command, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(command, cancellationToken);
@@ -52,6 +55,7 @@ public class AuthController(ISender sender) : ControllerBase
     }
 
     [HttpPost("resend-confirmation-email")]
+    [EnableRateLimiting("email")]
     public async Task<IActionResult> ResendConfirmationEmail([FromBody] ResendConfirmationEmailCommand command, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(command, cancellationToken);
@@ -60,6 +64,7 @@ public class AuthController(ISender sender) : ControllerBase
     }
 
     [HttpPost("forget-password")]
+    [EnableRateLimiting("email")]
     public async Task<IActionResult> ForgetPassword([FromBody] ForgetPasswordCommand command, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(command, cancellationToken);

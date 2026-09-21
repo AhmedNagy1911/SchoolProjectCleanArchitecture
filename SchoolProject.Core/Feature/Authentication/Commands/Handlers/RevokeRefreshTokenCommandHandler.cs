@@ -26,8 +26,10 @@ public class RevokeRefreshTokenCommandHandler(UserManager<ApplicationUser> userM
         if (user is null)
             return Result.Failure(UserErrors.InvalidJwtToken);
 
+        var hash = AuthTokens.Hash(request.RefreshToken);
+
         var userRefreshToken = user.RefreshTokens
-            .SingleOrDefault(x => x.Token == request.RefreshToken && x.IsActive);
+            .SingleOrDefault(x => x.Token == hash && x.IsActive);
 
         if (userRefreshToken is null)
             return Result.Failure(UserErrors.InvalidRefreshToken);

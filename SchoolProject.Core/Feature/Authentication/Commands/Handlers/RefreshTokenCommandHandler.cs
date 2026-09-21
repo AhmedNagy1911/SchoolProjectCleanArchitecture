@@ -33,21 +33,23 @@ public class RefreshTokenCommandHandler(UserManager<ApplicationUser> userManager
         if (await _userManager.IsLockedOutAsync(user))
             return Result.Failure<AuthResponse>(UserErrors.LockedUser);
 
+        var hash = AuthTokens.Hash(request.RefreshToken);
+
         var userRefreshToken = user.RefreshTokens
-            .SingleOrDefault(x => x.Token == request.RefreshToken && x.IsActive);
+            .SingleOrDefault(x => x.Token == hash && x.IsActive);
 
         if (userRefreshToken is null)
             return Result.Failure<AuthResponse>(UserErrors.InvalidRefreshToken);
 
-        // revoke the old one
         userRefreshToken.RevokedOn = DateTime.UtcNow;
 
         var (newToken, expiresIn) = _jwtProvider.GenerateToken(user);
 
-        var newRefreshToken = AuthTokens.NewRefreshToken();
+        var (newRefreshToken, rawRefreshToken) = AuthTokens.NewRefreshToken();
+        AuthTokens.RemoveStale(user);
         user.RefreshTokens.Add(newRefreshToken);
         await _userManager.UpdateAsync(user);
 
-        return Result.Success(AuthResponse.From(user, newToken, expiresIn, newRefreshToken.Token, newRefreshToken.ExpiresOn));
+        return Result.Success(AuthResponse.From(user, newToken, expiresIn, rawRefreshToken, newRefreshToken.ExpiresOn));
     }
 }

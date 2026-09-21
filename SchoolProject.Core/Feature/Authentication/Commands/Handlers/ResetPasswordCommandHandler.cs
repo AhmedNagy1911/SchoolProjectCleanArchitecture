@@ -36,7 +36,14 @@ public class ResetPasswordCommandHandler(UserManager<ApplicationUser> userManage
         }
 
         if (result.Succeeded)
+        {
+            foreach (var token in user.RefreshTokens.Where(x => x.IsActive))
+                token.RevokedOn = DateTime.UtcNow;
+
+            await _userManager.UpdateAsync(user);
+
             return Result.Success();
+        }
 
         var error = result.Errors.First();
 

@@ -22,9 +22,6 @@ public class LoginCommandHandler(UserManager<ApplicationUser> userManager, IJwtP
         if (user is null)
             return Result.Failure<AuthResponse>(UserErrors.InvalidCredentials);
 
-        if (user.IsDisabled)
-            return Result.Failure<AuthResponse>(UserErrors.DisabledUser);
-
         if (await _userManager.IsLockedOutAsync(user))
             return Result.Failure<AuthResponse>(UserErrors.LockedUser);
 
@@ -34,6 +31,9 @@ public class LoginCommandHandler(UserManager<ApplicationUser> userManager, IJwtP
             return Result.Failure<AuthResponse>(UserErrors.InvalidCredentials);
         }
 
+        if (user.IsDisabled)
+            return Result.Failure<AuthResponse>(UserErrors.DisabledUser);
+
         if (!user.EmailConfirmed)
             return Result.Failure<AuthResponse>(UserErrors.EmailNotConfirmed);
 
@@ -41,11 +41,12 @@ public class LoginCommandHandler(UserManager<ApplicationUser> userManager, IJwtP
 
         var (token, expiresIn) = _jwtProvider.GenerateToken(user);
 
-        var refreshToken = AuthTokens.NewRefreshToken();
+        var (refreshToken, rawRefreshToken) = AuthTokens.NewRefreshToken();
+        AuthTokens.RemoveStale(user);
         user.RefreshTokens.Add(refreshToken);
         await _userManager.UpdateAsync(user);
 
-        return Result.Success(AuthResponse.From(user, token, expiresIn, refreshToken.Token, refreshToken.ExpiresOn));
+        return Result.Success(AuthResponse.From(user, token, expiresIn, rawRefreshToken, refreshToken.ExpiresOn));
 
     }
 }

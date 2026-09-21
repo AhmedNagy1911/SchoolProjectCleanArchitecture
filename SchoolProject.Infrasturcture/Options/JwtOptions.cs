@@ -6,7 +6,7 @@ public class JwtOptions
 {
     public const string SectionName = "Jwt";
 
-    [Required]
+    [Required, MinLength(32)]
     public string Key { get; init; } = string.Empty;
     [Required]
     public string Issuer { get; init; } = string.Empty;

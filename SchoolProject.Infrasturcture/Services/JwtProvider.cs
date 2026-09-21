@@ -48,10 +48,10 @@ public class JwtProvider(IOptions<JwtOptions> options) : IJwtProvider
             {
                 IssuerSigningKey = symmetricSecurityKey,
                 ValidateIssuerSigningKey = true,
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                // The access token is usually already expired when it is sent to /refresh,
-                // so only the signature matters here.
+                ValidateIssuer = true,
+                ValidIssuer = _options.Issuer,
+                ValidateAudience = true,
+                ValidAudience = _options.Audience,
                 ValidateLifetime = false,
                 ClockSkew = TimeSpan.Zero
             }, out SecurityToken validatedToken);
