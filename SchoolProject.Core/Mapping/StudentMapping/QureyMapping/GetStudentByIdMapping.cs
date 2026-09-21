@@ -8,6 +8,6 @@ public partial class StudentProfile
     public void GetStudentByIdMapping()
     {
         CreateMap<Student, GetSingleStudentResponse>()
-           .ForMember(dest => dest.DepartmentName, opt => opt.MapFrom(src => src.Department.DName));
+           .ForMember(dest => dest.DepartmentName, opt => opt.MapFrom(src => src.Department!.DName));
     }
 }
