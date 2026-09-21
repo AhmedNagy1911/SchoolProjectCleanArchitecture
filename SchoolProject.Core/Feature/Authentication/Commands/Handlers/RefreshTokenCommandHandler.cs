@@ -43,7 +43,8 @@ public class RefreshTokenCommandHandler(UserManager<ApplicationUser> userManager
 
         userRefreshToken.RevokedOn = DateTime.UtcNow;
 
-        var (newToken, expiresIn) = _jwtProvider.GenerateToken(user);
+        var roles = await _userManager.GetRolesAsync(user);
+        var (newToken, expiresIn) = _jwtProvider.GenerateToken(user, roles);
 
         var (newRefreshToken, rawRefreshToken) = AuthTokens.NewRefreshToken();
         AuthTokens.RemoveStale(user);

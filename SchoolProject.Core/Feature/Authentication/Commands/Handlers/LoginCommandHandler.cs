@@ -39,7 +39,8 @@ public class LoginCommandHandler(UserManager<ApplicationUser> userManager, IJwtP
 
         await _userManager.ResetAccessFailedCountAsync(user);
 
-        var (token, expiresIn) = _jwtProvider.GenerateToken(user);
+        var roles = await _userManager.GetRolesAsync(user);
+        var (token, expiresIn) = _jwtProvider.GenerateToken(user, roles);
 
         var (refreshToken, rawRefreshToken) = AuthTokens.NewRefreshToken();
         AuthTokens.RemoveStale(user);
